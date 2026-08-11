@@ -6,18 +6,24 @@ import DivBox from "./components/DivBox";
 import Button from "./components/Button";
 
 const SUNFLOWER_URL = "https://aayusasunflower.vercel.app/#/gallery";
+const HAPPY_BIRTHDAY_URL = "https://aayusasunflower.vercel.app/#/happybirthday";
 
 function App() {
-  const [isSecretRoute, setIsSecretRoute] = useState(false);
+  const [routeType, setRouteType] = useState(null);
   const [showGate, setShowGate] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
 
   useEffect(() => {
     const checkHash = () => {
       const hash = window.location.hash;
-      const secret = hash === "#ankitamiss" || hash === "#/ankitamiss";
-      setIsSecretRoute(secret);
-      if (!secret) setShowGate(false);
+      let type = null;
+      if (hash === "#ankitamiss" || hash === "#/ankitamiss") {
+        type = "ankitamiss";
+      } else if (hash === "#happy20sbirthday" || hash === "#/happy20sbirthday") {
+        type = "happybirthday";
+      }
+      setRouteType(type);
+      if (!type) setShowGate(false);
     };
 
     checkHash();
@@ -26,12 +32,18 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (unlocked) {
+    if (routeType === "happybirthday") {
+      window.location.replace(HAPPY_BIRTHDAY_URL);
+    } else if (unlocked) {
       window.location.replace(SUNFLOWER_URL);
     }
-  }, [unlocked]);
+  }, [unlocked, routeType]);
 
-  if (isSecretRoute) {
+  if (routeType === "happybirthday") {
+    return null;
+  }
+
+  if (routeType === "ankitamiss") {
     if (showGate) {
       return <DivBox onUnlock={() => setUnlocked(true)} />;
     }

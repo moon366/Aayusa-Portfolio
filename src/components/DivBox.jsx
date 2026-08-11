@@ -4,9 +4,9 @@ import "tailwindcss";
 const CORRECT_PASSWORD = "20820804";
 const STORAGE_KEY = "aayusa_auth";
 
-function DivBox({ children, onUnlock }) {
+function DivBox({ children, onUnlock, password = CORRECT_PASSWORD, storageKey = STORAGE_KEY }) {
   const [authenticated, setAuthenticated] = useState(() => {
-    return sessionStorage.getItem(STORAGE_KEY) === "true";
+    return sessionStorage.getItem(storageKey) === "true";
   });
   const [input, setInput] = useState("");
   const [error, setError] = useState(false);
@@ -18,8 +18,8 @@ function DivBox({ children, onUnlock }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (input === CORRECT_PASSWORD) {
-      sessionStorage.setItem(STORAGE_KEY, "true");
+    if (input === password) {
+      sessionStorage.setItem(storageKey, "true");
       setAuthenticated(true);
       if (onUnlock) onUnlock();
     } else {
